@@ -1,0 +1,142 @@
+<template>
+	<div>
+		<nuxt-link to="/">1</nuxt-link>
+
+		{{ status }}
+		<div
+			v-if="status === 'pending'"
+			class="w-full relative bg-cover bg-no-repeat rounded-lg-9"
+		>
+			<div class="w-full mt-6 overflow-y-hidden overflow-x-auto hide-scrollbar">
+				<div class="w-max flex gap-2">
+					<div v-for="(item, index) in 10" :key="index" class="mr-2 last:mr-0">
+						<div class="w-[132px] h-full inline-block float-left">
+							<div class="w-full relative rounded-lg overflow-hidden">
+								<div class="w-full h-full">
+									<svg
+										width="132"
+										height="132"
+										viewBox="0 0 132 132"
+										fill="none"
+										xmlns="http://www.w3.org/2000/svg"
+									>
+										<rect width="132" height="132" fill="#191919" />
+										<path
+											d="M66.5866 42.0037C68.8422 42.0516 71.0977 42.4032 73.2572 43.0905C76.3765 44.0654 79.2879 45.7275 81.7514 47.8692C84.2148 50.0108 86.2304 52.6478 87.6381 55.6045C88.5499 57.4904 89.1897 59.5202 89.5417 61.5819C89.8136 63.1801 89.9576 64.8262 89.9736 66.4564C90.0215 73.6324 89.9896 80.7924 89.9896 87.9684C89.9896 89.4068 89.4137 89.9822 87.958 89.9982C86.3423 89.9982 84.7267 89.9982 83.1111 89.9982C79.0319 89.9982 75.8486 86.8337 75.8326 82.7423C75.8326 77.1325 75.8326 71.5228 75.8326 65.929C75.8166 61.2462 72.6333 57.3466 68.0583 56.3237C62.6035 55.0931 57.1167 58.8649 56.3009 64.3947C55.5011 69.7328 58.6044 74.3676 63.8193 75.6302C64.3951 75.774 64.987 75.838 65.5789 75.8539C67.4185 75.8859 69.2581 75.8539 71.0977 75.8699C72.3294 75.8699 73.0013 76.5252 72.9853 77.7558C72.9693 79.8655 73.0492 81.9751 72.8253 84.0688C72.4894 87.3132 69.386 89.9662 66.1227 89.9982C54.5893 90.142 44.5115 81.8313 42.4319 70.452C42.2719 69.5729 42.144 68.6939 42 67.8149C42 66.6162 42 65.4336 42 64.2349C42.144 63.3399 42.2879 62.4289 42.4319 61.5339C44.0156 52.2483 51.6299 44.417 60.9239 42.5151C62.7795 42.1475 64.6831 41.9717 66.5866 42.0037Z"
+											fill="#222222"
+										/>
+										<path
+											d="M71.696 67.0597L64.976 72.6437C64.608 73.0117 64.032 73.6197 63.264 73.3957C62.8 73.2677 62.448 72.7717 62.496 71.8597V60.8357C62.496 60.2437 62.592 59.6677 62.832 59.4117C63.312 58.9317 64.048 58.9477 64.496 59.3797L71.696 65.4437C72.128 65.8757 72.128 66.6277 71.696 67.0597Z"
+											fill="#222222"
+										/>
+									</svg>
+								</div>
+							</div>
+							<div class="w-full mt-2">
+								<div class="w-full h-4 flex-row-center">
+									<div class="w-full h-4 rounded-sm placeholder" />
+								</div>
+								<div class="w-full h-4 mt-1 flex-row-center">
+									<div class="w-1/2 h-4 rounded-sm placeholder" />
+								</div>
+								<div class="w-full h-4 mt-1 flex-row-center mt-0-75">
+									<div class="w-1/4 h-4 rounded-sm placeholder" />
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div v-else>
+			<TransitionGroup name="list">
+				<div
+					v-for="(block, index) in listBlockHome"
+					:key="`${index}-${block.id}`"
+				>
+					<nuxt-link :to="redirectLink(block)">{{ block.name }}</nuxt-link>
+				</div>
+			</TransitionGroup>
+		</div>
+	</div>
+</template>
+
+<script setup>
+const api = useFetchInstance();
+
+const { status, data: listBlockHome } = await useLazyAsyncData(
+	"index",
+	async () => {
+		const { data, metadata } = await api(
+			"mydio/audio/public/screen-blocks/prefetch?screenType=HOME&platformType=WAP&device_id=b838bf90-d915-47da-88d4-56ec8b4ae1bf"
+		);
+		console.log(metadata);
+		const listBlockHome = data.reduce((p, c, i) => {
+			if (
+				(c.hasOwnProperty("data") &&
+					c.fetchType === "SERVER_PRE_FETCH" &&
+					c.data.length > 0) ||
+				c.fetchType === "CLIENT_FETCH"
+			) {
+				p.push(c);
+			}
+			return p;
+		}, []);
+
+		return listBlockHome;
+	}
+);
+
+const redirectLink = (block) => {
+	if (block.categoryId) {
+		return { name: "genre-id", params: { id: block.categoryId } };
+	}
+
+	return { name: "genre" };
+};
+</script>
+
+<style scoped>
+@keyframes bgAnimate {
+	0% {
+		background-position: 50% 0;
+	}
+
+	100% {
+		background-position: -150% 0;
+	}
+}
+.placeholder {
+	background-image: linear-gradient(
+		to right,
+		#222222 0%,
+		#383838 10%,
+		#383838 15%,
+		#222222 20%,
+		#222222 100%
+	);
+	background-size: 200% 100%;
+	box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+	animation: bgAnimate 1.2s linear infinite;
+}
+
+.list-enter-active,
+.list-leave-active {
+	transition: all 0.25s ease;
+}
+.list-enter-from,
+.list-leave-to {
+	opacity: 0;
+	transform: translateX(-30px);
+}
+
+.hide-scrollbar {
+	-ms-overflow-style: none;
+	scrollbar-width: none;
+
+	&::-webkit-scrollbar {
+		display: none; /* Safari and Chrome */
+	}
+}
+</style>

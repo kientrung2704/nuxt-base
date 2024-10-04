@@ -1,0 +1,30 @@
+{
+    "hello": "Hello",
+    "language": "language",
+    "vjp": {
+        "language": "vjp"
+    },
+    "login": {
+        "title": "Title",
+        "logIn": "Log in",
+        "placeholder-email": "Nhập địa chỉ email",
+        "placeholder-password": "Nhập mật khẩu",
+        "email": "Email",
+        "password": "Mật khẩu",
+        "remember-me": "Ghi nhớ tôi",
+        "forgot-password": "Quên mật khẩu",
+        "forgot-description-title": "Nhập địa chỉ email đã đăng ký",
+        "send": "Gửi",
+        "new-password": "Mật khẩu mới",
+        "re-new-password": "Nhập lại mật khẩu",
+        "reset-title": "Đặt lại mật khẩu",
+        "reset-title-password": "Nhập mật khẩu mới",
+        "reset-description-title": "Hãy nhập mật khẩu mới",
+        "back-login": "Quay về trang đăng nhập",
+        "register": "Bạn chưa có tài khoản? đăng ký mới ở đây."
+    },
+    "Success" : "Success",
+    "Error" : "Error",
+    "Info" : "Info",
+    "Warning" : "Warning"
+}
